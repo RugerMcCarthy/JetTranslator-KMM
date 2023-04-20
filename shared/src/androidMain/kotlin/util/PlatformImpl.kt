@@ -7,11 +7,10 @@ import android.content.Context
 import android.content.res.Configuration
 import android.view.inputmethod.InputMethodManager
 
-
 actual fun hideSoftKeyboard() {
     AndroidContextWrapper.context?.apply {
         with(getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager) {
-            hideSoftInputFromWindow(window.decorView. windowToken, 0)
+            hideSoftInputFromWindow(window.decorView.windowToken, 0)
         }
     }
 }
@@ -23,7 +22,6 @@ actual fun copyToClipboard(content: String) {
         clipboardManager.setPrimaryClip(clipData)
     }
 }
-
 
 actual fun detectDarkMode(): Boolean {
     AndroidContextWrapper.context?.apply {

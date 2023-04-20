@@ -24,15 +24,18 @@ actual val httpClient = HttpClient(OkHttp) {
         }
     }
     install(ContentNegotiation) {
-        json(Json {
-            prettyPrint = true
-            isLenient = true
-        })
+        json(
+            Json {
+                prettyPrint = true
+                isLenient = true
+            }
+        )
     }
 }
 
 object AndroidContextWrapper {
     var context: Activity? = null
+
     @Composable
     fun renderContent() {
         App()

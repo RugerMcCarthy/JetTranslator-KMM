@@ -4,6 +4,24 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.compose")
     kotlin("plugin.serialization").version("1.8.20")
+    id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
+}
+
+ktlint {
+    // 以下是一些可选配置
+    version.set("0.40.0")
+    enableExperimentalRules.set(true)
+    verbose.set(true)
+    debug.set(false)
+    android.set(true)
+    ignoreFailures.set(true)
+    outputToConsole.set(false)
+}
+
+tasks.withType<org.jlleitschuh.gradle.ktlint.tasks.KtLintCheckTask> {
+    // 可以在这里添加一些针对ktlint校验的task
+    description = "Check with ktlint"
+    group = "verification"
 }
 
 kotlin {

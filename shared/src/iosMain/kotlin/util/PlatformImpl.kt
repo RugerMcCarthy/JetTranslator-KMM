@@ -1,11 +1,9 @@
 package util
 
 import platform.UIKit.UIPasteboard
-import platform.UIKit.UITraitCollection
 import platform.UIKit.UIUserInterfaceStyle
 import platform.UIKit.endEditing
 import viewController
-
 
 actual fun hideSoftKeyboard() {
     viewController?.view()?.endEditing(true)

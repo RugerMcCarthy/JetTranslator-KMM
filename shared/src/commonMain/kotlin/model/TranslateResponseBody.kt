@@ -20,13 +20,13 @@ data class Usage(
 )
 
 @Serializable
-data class Message (
+data class Message(
     var role: String,
     var content: String
 )
 
 @Serializable
-data class Choice (
+data class Choice(
     var message: Message,
     var finish_reason: String,
     var index: Int

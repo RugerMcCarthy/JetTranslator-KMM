@@ -1,6 +1,5 @@
 package ui
 
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -23,9 +22,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.ScaffoldState
-import androidx.compose.runtime.Composable
-import model.MainViewModel
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -37,19 +33,19 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.rememberModalBottomSheetState
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
@@ -57,18 +53,22 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import edu.bupt.jetdeepl.data.AllAvailableLanguages
 import kotlinx.coroutines.coroutineScope
-import model.SelectMode
 import kotlinx.coroutines.launch
+import model.MainViewModel
+import model.SelectMode
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import ui.theme.extensionColors
 import util.hideSoftKeyboard
 
-@OptIn(ExperimentalMaterialApi::class,
+@OptIn(
+    ExperimentalMaterialApi::class,
     ExperimentalFoundationApi::class,
     ExperimentalAnimationApi::class
 )
@@ -92,7 +92,9 @@ fun TranslateLayout(viewModel: MainViewModel, scaffoldState: ScaffoldState) {
                 Column(
                     Modifier
                         .fillMaxSize()
-                        .padding(30.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                        .padding(30.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     InputBlock(viewModel, scaffoldState)
                     Divider(color = MaterialTheme.extensionColors.translateColor, thickness = 2.dp)
                     OutputBlock(viewModel, scaffoldState)
@@ -106,7 +108,7 @@ fun TranslateLayout(viewModel: MainViewModel, scaffoldState: ScaffoldState) {
 @ExperimentalAnimationApi
 @Composable
 fun ColumnScope.OutputBlock(viewModel: MainViewModel, scaffoldState: ScaffoldState) {
-    val coroutineScope = rememberCoroutineScope();
+    val coroutineScope = rememberCoroutineScope()
     Box(
         modifier = Modifier
             .weight(0.6f)
@@ -114,7 +116,6 @@ fun ColumnScope.OutputBlock(viewModel: MainViewModel, scaffoldState: ScaffoldSta
             .pointerInput(Unit) {
                 detectTapGestures(
                     onTap = {
-                        Log.d("hide soft keyboard")
                         hideSoftKeyboard()
                     }
                 )
@@ -130,12 +131,12 @@ fun ColumnScope.OutputBlock(viewModel: MainViewModel, scaffoldState: ScaffoldSta
                     .fillMaxHeight()
                     .clip(RoundedCornerShape(20.dp))
                     .background(MaterialTheme.extensionColors.outputBackgroundColor)
-                    .padding(start = 20.dp, top =  20.dp),
+                    .padding(start = 20.dp, top = 20.dp),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.W500,
                 color = MaterialTheme.extensionColors.outputTextColor
             )
-            if(viewModel.displayOutput.isNotEmpty() && viewModel.isTranslatSuccess) {
+            if (viewModel.displayOutput.isNotEmpty() && viewModel.isTranslatSuccess) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -149,13 +150,16 @@ fun ColumnScope.OutputBlock(viewModel: MainViewModel, scaffoldState: ScaffoldSta
                             .fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        IconButton(onClick = {
-                            viewModel.clearOutputDisplay()
-                        }) {
+                        IconButton(
+                            onClick = {
+                                viewModel.clearOutputDisplay()
+                            }
+                        ) {
                             Icon(
                                 painter = painterResource("ic_cancel.xml"),
                                 contentDescription = "cancel",
-                                tint = MaterialTheme.extensionColors.iconColor)
+                                tint = MaterialTheme.extensionColors.iconColor
+                            )
                         }
                     }
                     Row(
@@ -237,7 +241,7 @@ fun ColumnScope.InputBlock(viewModel: MainViewModel, scaffoldState: ScaffoldStat
                     fontWeight = FontWeight.W500
                 ),
                 placeholder = {
-                    Text (
+                    Text(
                         text = "随便输入点什么吧~",
                         color = MaterialTheme.extensionColors.inputHintColor,
                         fontSize = 20.sp,
@@ -273,7 +277,8 @@ fun ColumnScope.InputBlock(viewModel: MainViewModel, scaffoldState: ScaffoldStat
                         Icon(
                             painter = painterResource("ic_volumn.xml"),
                             contentDescription = "volumn",
-                            tint = MaterialTheme.extensionColors.iconColor)
+                            tint = MaterialTheme.extensionColors.iconColor
+                        )
                     }
                 }
                 Row(
@@ -316,7 +321,10 @@ fun ColumnScope.InputBlock(viewModel: MainViewModel, scaffoldState: ScaffoldStat
                             .weight(0.7f)
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(20.dp)),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.extensionColors.translateColor, contentColor = Color.White)
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = MaterialTheme.extensionColors.translateColor,
+                            contentColor = Color.White
+                        )
                     ) {
                         Text(
                             text = "翻译",
@@ -330,30 +338,32 @@ fun ColumnScope.InputBlock(viewModel: MainViewModel, scaffoldState: ScaffoldStat
     }
 }
 
-var isFirst = true
 @OptIn(ExperimentalResourceApi::class)
 @ExperimentalMaterialApi
 @Composable
-fun SelectLanguageBar(sheetState: ModalBottomSheetState, scaffoldState: ScaffoldState, viewModel: MainViewModel) {
-    var rotateAngle = remember { Animatable(0f) }
-    var textAlpha = remember { Animatable(1f) }
-    LaunchedEffect(viewModel.flipToggle) {
-        if (isFirst){
-            isFirst = false
-            return@LaunchedEffect
-        }
-        launch {
-            rotateAngle.animateTo(if (viewModel.flipToggle) 180f else 0f, tween(1000))
-        }
-        launch {
-            textAlpha.animateTo(0f, tween(500))
-            var tempLanguage = viewModel.displaySourceLanguage
-            viewModel.displaySourceLanguage = viewModel.displayTargetLanguage
-            viewModel.displayTargetLanguage = tempLanguage
-            textAlpha.animateTo(1f, tween(500))
+fun SelectLanguageBar(
+    sheetState: ModalBottomSheetState,
+    scaffoldState: ScaffoldState,
+    viewModel: MainViewModel
+) {
+    val rotateAngle = remember { Animatable(0f) }
+    val textAlpha = remember { Animatable(1f) }
+    val scope = rememberCoroutineScope()
+    scope.launch {
+        viewModel.flipEventFlow.collect {
+            launch {
+                rotateAngle.animateTo(if (viewModel.flipToggle) 180f else 0f, tween(1000))
+            }
+            launch {
+                textAlpha.animateTo(0f, tween(500))
+                val tempLanguage = viewModel.displaySourceLanguage
+                viewModel.displaySourceLanguage = viewModel.displayTargetLanguage
+                viewModel.displayTargetLanguage = tempLanguage
+                textAlpha.animateTo(1f, tween(500))
+            }
         }
     }
-    val scope = rememberCoroutineScope()
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
@@ -370,7 +380,9 @@ fun SelectLanguageBar(sheetState: ModalBottomSheetState, scaffoldState: Scaffold
                     sheetState.show()
                 }
             },
-            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.onBackground),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = MaterialTheme.colors.onBackground
+            ),
             modifier = Modifier
                 .width(150.dp)
                 .fillMaxHeight()
@@ -385,7 +397,12 @@ fun SelectLanguageBar(sheetState: ModalBottomSheetState, scaffoldState: Scaffold
                 color = Color.Black
             )
             Spacer(modifier = Modifier.width(2.dp))
-            Icon(painter = painterResource("ic_down_arrow.xml"), contentDescription = "down_arrow", Modifier.size(15.dp), tint = MaterialTheme.extensionColors.toggleLangIconColor)
+            Icon(
+                painter = painterResource("ic_down_arrow.xml"),
+                contentDescription = "down_arrow",
+                Modifier.size(15.dp),
+                tint = MaterialTheme.extensionColors.toggleLangIconColor
+            )
         }
         Box(
             modifier = Modifier
@@ -422,7 +439,9 @@ fun SelectLanguageBar(sheetState: ModalBottomSheetState, scaffoldState: Scaffold
                     sheetState.show()
                 }
             },
-            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.onBackground),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = MaterialTheme.colors.onBackground
+            ),
             modifier = Modifier
                 .width(150.dp)
                 .fillMaxHeight()
@@ -436,7 +455,12 @@ fun SelectLanguageBar(sheetState: ModalBottomSheetState, scaffoldState: Scaffold
                 color = Color.Black
             )
             Spacer(modifier = Modifier.width(2.dp))
-            Icon(painter = painterResource("ic_down_arrow.xml"), contentDescription = "down_arrow", Modifier.size(15.dp), tint = MaterialTheme.extensionColors.toggleLangIconColor)
+            Icon(
+                painter = painterResource("ic_down_arrow.xml"),
+                contentDescription = "down_arrow",
+                Modifier.size(15.dp),
+                tint = MaterialTheme.extensionColors.toggleLangIconColor
+            )
         }
     }
 }
@@ -462,7 +486,7 @@ fun SelectLanguageSheet(sheetState: ModalBottomSheetState, viewModel: MainViewMo
             LazyColumn(
                 Modifier.fillMaxWidth(),
             ) {
-                for(language in viewModel.displayLanguageList) {
+                for (language in viewModel.displayLanguageList) {
                     if (viewModel.currentSelectMode == SelectMode.TARGET && language == "自动检测") {
                         continue
                     }
@@ -479,7 +503,7 @@ fun SelectLanguageSheet(sheetState: ModalBottomSheetState, viewModel: MainViewMo
 @ExperimentalMaterialApi
 @Composable
 fun SelectLanguageItem(sheetState: ModalBottomSheetState, viewModel: MainViewModel, lang: String) {
-    var scope = rememberCoroutineScope()
+    val scope = rememberCoroutineScope()
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -504,7 +528,8 @@ fun SelectLanguageItem(sheetState: ModalBottomSheetState, viewModel: MainViewMod
         )
         if (viewModel.isSelectedLanguage(lang)) {
             Icon(
-                painter = painterResource("ic_selected.xml"), contentDescription = "selected",
+                painter = painterResource("ic_selected.xml"),
+                contentDescription = "selected",
                 tint = MaterialTheme.extensionColors.selectLangTextSpecificColor,
                 modifier = Modifier
                     .weight(1f)
@@ -517,14 +542,14 @@ fun SelectLanguageItem(sheetState: ModalBottomSheetState, viewModel: MainViewMod
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun SearchLanguageField(viewModel: MainViewModel) {
-    var displayLanguageInput by remember {mutableStateOf("")}
+    var displayLanguageInput by remember { mutableStateOf("") }
     TextField(
         value = displayLanguageInput,
         onValueChange = { value ->
             displayLanguageInput = value
             viewModel.displayLanguageList = if (value.isEmpty()) {
                 AllAvailableLanguages.keys.toList()
-            } else{
+            } else {
                 AllAvailableLanguages.keys.filter {
                     it.contains(value)
                 }
@@ -540,7 +565,7 @@ fun SearchLanguageField(viewModel: MainViewModel) {
                         displayLanguageInput = ""
                         viewModel.displayLanguageList = AllAvailableLanguages.keys.toList()
                     }
-                ){
+                ) {
                     Icon(
                         painter = painterResource("ic_cancel.xml"),
                         contentDescription = "cancel",
@@ -565,4 +590,3 @@ fun SearchLanguageField(viewModel: MainViewModel) {
             }
     )
 }
-

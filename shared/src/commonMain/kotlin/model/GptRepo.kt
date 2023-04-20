@@ -9,16 +9,20 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.URLProtocol
 import io.ktor.http.path
 
-
 class GptRepo(private var httpClient: HttpClient) {
     val hostUrl = "ruger.life"
-    suspend fun translateByAPI(originWord: String, sourceLanguageCode: String, targetLanguageCode: String, block: suspend (response: HttpResponse) -> Unit) {
+    suspend fun translateByAPI(
+        originWord: String,
+        sourceLanguageCode: String,
+        targetLanguageCode: String,
+        block: suspend (response: HttpResponse) -> Unit
+    ) {
         var prompt = if (sourceLanguageCode == "自动检测") {
-            "你是一个翻译工具，请将下面这个句子翻译为${targetLanguageCode},"
+            "你是一个翻译工具，请将下面这个句子翻译为$targetLanguageCode,"
         } else {
-            "你是一个翻译工具，请将下面这个${sourceLanguageCode}句子翻译为${targetLanguageCode},"
+            "你是一个翻译工具，请将下面这个${sourceLanguageCode}句子翻译为$targetLanguageCode,"
         }
-        prompt += "并且只输出翻译结果, 对于一切翻译出错的情况则只输出翻译出错的字样: ${originWord}"
+        prompt += "并且只输出翻译结果, 对于一切翻译出错的情况则只输出翻译出错的字样: $originWord"
         val httpResponse = httpClient.post {
             method = HttpMethod.Post
             url {

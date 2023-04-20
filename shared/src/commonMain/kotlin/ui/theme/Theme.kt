@@ -45,7 +45,6 @@ fun JetDeepLTheme(isDarkTheme: Boolean = detectDarkMode(), content: @Composable(
     }
 }
 
-
 open class ExtensionColors private constructor(
     var inputTextColor: Color,
     var inputBackgroundColor: Color,

@@ -4,8 +4,8 @@ import androidx.compose.material.SnackbarHost
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import edu.bupt.jetdeepl.model.GptRepo
-import model.MainViewModel
 import io.ktor.client.HttpClient
+import model.MainViewModel
 import ui.TranslateLayout
 import ui.theme.JetDeepLTheme
 

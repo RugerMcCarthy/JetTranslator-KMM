@@ -9,20 +9,18 @@ import edu.bupt.jetdeepl.model.GptRepo
 import io.ktor.client.call.body
 import io.ktor.client.statement.bodyAsText
 import io.ktor.utils.io.errors.IOException
+import kotlin.coroutines.EmptyCoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
-
 import kotlinx.coroutines.launch
 import util.copyToClipboard
 import util.hideSoftKeyboard
 
-import kotlin.coroutines.EmptyCoroutineContext
-
 sealed class SelectMode {
-    object SOURCE: SelectMode()
-    object TARGET: SelectMode()
+    object SOURCE : SelectMode()
+    object TARGET : SelectMode()
 }
 
 class MainViewModel constructor(private var gptRepo: GptRepo) {
@@ -31,7 +29,9 @@ class MainViewModel constructor(private var gptRepo: GptRepo) {
     var isTranslatSuccess by mutableStateOf(false)
     var displaySourceLanguage by mutableStateOf("自动检测")
     var displayTargetLanguage by mutableStateOf("中文")
-    var flipToggle by mutableStateOf(false)
+    var flipToggle = false
+    var flipEventFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+
     var currentSelectMode: SelectMode by mutableStateOf(SelectMode.SOURCE)
         private set
     var focusOnSearch by mutableStateOf(false)
@@ -40,28 +40,29 @@ class MainViewModel constructor(private var gptRepo: GptRepo) {
         AllAvailableLanguages.keys.toList()
     )
 
-    val viewModelScope = CoroutineScope(EmptyCoroutineContext);
+    val viewModelScope = CoroutineScope(EmptyCoroutineContext)
     private val sourceLanguageCode
         get() = displaySourceLanguage
     private val targetLanguageCode
         get() = displayTargetLanguage
 
     // API 方式
-    private fun translateByAPI(originWord: String, translateFlow: MutableSharedFlow<String>){
-        viewModelScope.launch(Dispatchers.Default){
-            try{
+    private fun translateByAPI(originWord: String, translateFlow: MutableSharedFlow<String>) {
+        viewModelScope.launch(Dispatchers.Default) {
+            try {
                 gptRepo.translateByAPI(originWord, sourceLanguageCode, targetLanguageCode) { response ->
-                        if(response.status.value == 200) {
-                            Log.d(response.bodyAsText())
-                            val body: TranslateResponseBody = response.body()
-                            val content = body.choices[0].message.content ?: "出错了~"
-                            translateFlow.emit(content.replace("\"", ""))
-                            isTranslatSuccess = true
-                        } else {
-                            Log.d("network error")
-                        }
+                    if (response.status.value == 200) {
+                        Log.d(response.bodyAsText())
+                        val body: TranslateResponseBody = response.body()
+                        val content = body.choices[0].message.content ?: "出错了~"
+                        translateFlow.emit(content.replace("\"", ""))
+                        isTranslatSuccess = true
+                    } else {
+                        translateFlow.emit("似乎网络出现了点问题～")
+                    }
                 }
-            }catch(e: IOException){
+            } catch (e: IOException) {
+                translateFlow.emit("似乎网络出现了点问题～")
                 e.printStackTrace()
             }
         }
@@ -107,6 +108,10 @@ class MainViewModel constructor(private var gptRepo: GptRepo) {
 
     fun flipLanguage() {
         flipToggle = !flipToggle
+//        viewModelScope.launch {
+//            flipEventFlow.emit(Unit)
+//        }
+        flipEventFlow.tryEmit(Unit)
     }
 
     fun changeSelectMode(selectMode: SelectMode) {
@@ -139,4 +144,3 @@ class MainViewModel constructor(private var gptRepo: GptRepo) {
         copyToClipboard(displayOutput)
     }
 }
-
