@@ -56,6 +56,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -140,6 +141,7 @@ fun SettingsDrawer(viewModel: MainViewModel) {
                                 it.substring(0, 5)
                             }
                         },
+                        cursorBrush = SolidColor(MaterialTheme.extensionColors.inputTextColor),
                         modifier = Modifier
                             .width(70.dp)
                             .fillMaxHeight()
@@ -360,7 +362,8 @@ fun ColumnScope.InputBlock(viewModel: MainViewModel, scaffoldState: ScaffoldStat
                     backgroundColor = Color.Transparent,
                     focusedIndicatorColor = Color.White,
                     unfocusedIndicatorColor = Color.White,
-                    textColor = MaterialTheme.extensionColors.inputTextColor
+                    textColor = MaterialTheme.extensionColors.inputTextColor,
+                    cursorColor = MaterialTheme.extensionColors.inputTextColor
                 )
             )
             Row(
