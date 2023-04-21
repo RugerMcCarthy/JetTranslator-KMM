@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import edu.bupt.jetdeepl.model.GptRepo
 import io.ktor.client.HttpClient
 import model.MainViewModel
+import ui.SettingsDrawer
 import ui.TranslateLayout
 import ui.theme.JetDeepLTheme
 
@@ -21,7 +22,8 @@ fun Home() {
                     snackbarData = data
                 )
             }
-        }
+        },
+        drawerContent = { SettingsDrawer(viewModel) }
     ) {
         TranslateLayout(viewModel, scaffoldState)
     }

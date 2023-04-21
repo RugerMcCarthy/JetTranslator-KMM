@@ -78,7 +78,7 @@ open class ExtensionColors private constructor(
         toggleLangTextColor = Color.White,
         selectLangTextColor = Color.White,
         selectLangTextSpecificColor = Color(0xff99c455),
-        iconColor = Color(0xffffffff),
+        iconColor = Color.White,
         translateColor = Color(0xff5d5df3),
         inputHintColor = Color(0xffcccccc),
         searchLanguageColor = Color(0xfff3f4f6),

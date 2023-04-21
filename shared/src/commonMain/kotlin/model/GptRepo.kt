@@ -12,6 +12,7 @@ import io.ktor.http.path
 class GptRepo(private var httpClient: HttpClient) {
     val hostUrl = "ruger.life"
     suspend fun translateByAPI(
+        accessCode: String,
         originWord: String,
         sourceLanguageCode: String,
         targetLanguageCode: String,
@@ -31,7 +32,7 @@ class GptRepo(private var httpClient: HttpClient) {
                 path("/api/openai")
             }
             headers {
-                append("access-code", "")
+                append("access-code", accessCode)
                 append("path", "v1/chat/completions")
                 append("Content-Type", "application/json")
             }

@@ -23,6 +23,7 @@ sealed class SelectMode {
 }
 
 class MainViewModel constructor(private var gptRepo: GptRepo) {
+    var accessCode by mutableStateOf("")
     var displayOutput by mutableStateOf("")
     var displayInput by mutableStateOf("")
     var isTranslatSuccess by mutableStateOf(false)
@@ -49,7 +50,12 @@ class MainViewModel constructor(private var gptRepo: GptRepo) {
     private fun translateByAPI(originWord: String, translateFlow: MutableSharedFlow<String>) {
         viewModelScope.launch(Dispatchers.Default) {
             try {
-                gptRepo.translateByAPI(originWord, sourceLanguageCode, targetLanguageCode) { response ->
+                gptRepo.translateByAPI(
+                    accessCode,
+                    originWord,
+                    sourceLanguageCode,
+                    targetLanguageCode
+                ) { response ->
                     if (response.status.value == 200) {
                         Log.d(response.bodyAsText())
                         val body: TranslateResponseBody = response.body()
