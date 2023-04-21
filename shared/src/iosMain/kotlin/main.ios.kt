@@ -1,3 +1,4 @@
+
 import androidx.compose.ui.window.ComposeUIViewController
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.darwin.Darwin
@@ -21,18 +22,10 @@ actual val httpClient = HttpClient(Darwin) {
         configureRequest {
             setAllowsCellularAccess(true)
         }
-        configureSession {
-            setTimeoutIntervalForRequest(10000.0)
-            setTimeoutIntervalForResource(10000.0)
-        }
     }
     install(ContentNegotiation) {
         json()
     }
 }
 
-var viewController: UIViewController? = null
-fun MainViewController(): UIViewController {
-    viewController = ComposeUIViewController { App() }
-    return viewController!!
-}
+fun MainViewController(): UIViewController = ComposeUIViewController { App() }

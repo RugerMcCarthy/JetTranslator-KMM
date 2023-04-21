@@ -8,6 +8,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import util.acquirePlatformContext
 import util.detectDarkMode
 
 private val DarkColorPalette = darkColors(
@@ -34,7 +35,10 @@ private val LightColorPalette = lightColors(
 )
 
 @Composable
-fun JetDeepLTheme(isDarkTheme: Boolean = detectDarkMode(), content: @Composable() () -> Unit) {
+fun JetDeepLTheme(
+    isDarkTheme: Boolean = detectDarkMode(acquirePlatformContext()),
+    content: @Composable() () -> Unit
+) {
     val colors = if (isDarkTheme) DarkColorPalette else LightColorPalette
     val extensionColors = if (isDarkTheme) ExtensionColors.DarkExtensionColors else ExtensionColors.LightExtensionColors
     CompositionLocalProvider(LocalExtensionColors provides extensionColors) {

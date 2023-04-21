@@ -19,7 +19,6 @@ ktlint {
 }
 
 tasks.withType<org.jlleitschuh.gradle.ktlint.tasks.KtLintCheckTask> {
-    // 可以在这里添加一些针对ktlint校验的task
     description = "Check with ktlint"
     group = "verification"
 }

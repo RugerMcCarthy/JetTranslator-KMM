@@ -65,6 +65,8 @@ import model.SelectMode
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import ui.theme.extensionColors
+import util.acquirePlatformContext
+import util.copyToClipboard
 import util.hideSoftKeyboard
 
 @OptIn(
@@ -109,6 +111,7 @@ fun TranslateLayout(viewModel: MainViewModel, scaffoldState: ScaffoldState) {
 @Composable
 fun ColumnScope.OutputBlock(viewModel: MainViewModel, scaffoldState: ScaffoldState) {
     val coroutineScope = rememberCoroutineScope()
+    val platformContext = acquirePlatformContext()
     Box(
         modifier = Modifier
             .weight(0.6f)
@@ -116,7 +119,7 @@ fun ColumnScope.OutputBlock(viewModel: MainViewModel, scaffoldState: ScaffoldSta
             .pointerInput(Unit) {
                 detectTapGestures(
                     onTap = {
-                        hideSoftKeyboard()
+                        hideSoftKeyboard(platformContext)
                     }
                 )
             }
@@ -195,7 +198,7 @@ fun ColumnScope.OutputBlock(viewModel: MainViewModel, scaffoldState: ScaffoldSta
                                     coroutineScope.launch {
                                         scaffoldState.snackbarHostState.showSnackbar("已复制到剪贴板")
                                     }
-                                    viewModel.requestCopyToClipboard()
+                                    copyToClipboard(platformContext, viewModel.displayOutput)
                                 }
                             },
                             modifier = Modifier
@@ -225,6 +228,7 @@ fun ColumnScope.OutputBlock(viewModel: MainViewModel, scaffoldState: ScaffoldSta
 @Composable
 fun ColumnScope.InputBlock(viewModel: MainViewModel, scaffoldState: ScaffoldState) {
     val coroutineScope = rememberCoroutineScope()
+    val platformContext = acquirePlatformContext()
     Box(
         modifier = Modifier
             .weight(0.4f)
@@ -312,7 +316,7 @@ fun ColumnScope.InputBlock(viewModel: MainViewModel, scaffoldState: ScaffoldStat
                                 }
                             } else {
                                 viewModel.clearOutputDisplay()
-                                viewModel.translate()
+                                viewModel.translate(platformContext)
                             }
                         },
                         modifier = Modifier
@@ -349,6 +353,7 @@ fun SelectLanguageBar(
     val rotateAngle = remember { Animatable(0f) }
     val textAlpha = remember { Animatable(1f) }
     val scope = rememberCoroutineScope()
+    val platformContext = acquirePlatformContext()
     scope.launch {
         viewModel.flipEventFlow.collect {
             launch {
@@ -376,7 +381,7 @@ fun SelectLanguageBar(
             onClick = {
                 viewModel.changeSelectMode(SelectMode.SOURCE)
                 scope.launch {
-                    hideSoftKeyboard()
+                    hideSoftKeyboard(platformContext)
                     sheetState.show()
                 }
             },
@@ -435,7 +440,7 @@ fun SelectLanguageBar(
             onClick = {
                 viewModel.changeSelectMode(SelectMode.TARGET)
                 scope.launch {
-                    hideSoftKeyboard()
+                    hideSoftKeyboard(platformContext)
                     sheetState.show()
                 }
             },
@@ -504,6 +509,7 @@ fun SelectLanguageSheet(sheetState: ModalBottomSheetState, viewModel: MainViewMo
 @Composable
 fun SelectLanguageItem(sheetState: ModalBottomSheetState, viewModel: MainViewModel, lang: String) {
     val scope = rememberCoroutineScope()
+    val platformContext = acquirePlatformContext()
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -512,7 +518,7 @@ fun SelectLanguageItem(sheetState: ModalBottomSheetState, viewModel: MainViewMod
             .clickable {
                 viewModel.selectLanguage(lang)
                 scope.launch {
-                    hideSoftKeyboard()
+                    hideSoftKeyboard(platformContext)
                     sheetState.hide()
                 }
             }

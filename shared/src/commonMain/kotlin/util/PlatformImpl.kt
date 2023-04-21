@@ -1,5 +1,12 @@
 package util
 
-expect fun hideSoftKeyboard()
-expect fun copyToClipboard(content: String)
-expect fun detectDarkMode(): Boolean
+import androidx.compose.runtime.Composable
+
+expect fun hideSoftKeyboard(context: Any)
+
+expect fun copyToClipboard(context: Any, content: String)
+
+expect fun detectDarkMode(context: Any): Boolean
+
+@Composable
+expect fun acquirePlatformContext(): Any

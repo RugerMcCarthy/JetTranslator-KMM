@@ -15,7 +15,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
-import util.copyToClipboard
 import util.hideSoftKeyboard
 
 sealed class SelectMode {
@@ -68,8 +67,8 @@ class MainViewModel constructor(private var gptRepo: GptRepo) {
         }
     }
 
-    fun translate() {
-        hideSoftKeyboard()
+    fun translate(platformContext: Any) {
+        hideSoftKeyboard(platformContext)
         isTranslatSuccess = false
         val translateFlow = MutableSharedFlow<String>()
         translateByAPI(displayInput, translateFlow)
@@ -138,9 +137,5 @@ class MainViewModel constructor(private var gptRepo: GptRepo) {
                 displayTargetLanguage = languageName
             }
         }
-    }
-
-    fun requestCopyToClipboard() {
-        copyToClipboard(displayOutput)
     }
 }

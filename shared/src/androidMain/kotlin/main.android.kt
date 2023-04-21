@@ -1,6 +1,5 @@
-import android.app.Activity
+
 import android.util.Log
-import androidx.compose.runtime.Composable
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -30,14 +29,5 @@ actual val httpClient = HttpClient(OkHttp) {
                 isLenient = true
             }
         )
-    }
-}
-
-object AndroidContextWrapper {
-    var context: Activity? = null
-
-    @Composable
-    fun renderContent() {
-        App()
     }
 }
