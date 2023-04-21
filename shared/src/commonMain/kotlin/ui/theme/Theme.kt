@@ -15,7 +15,7 @@ private val DarkColorPalette = darkColors(
     primary = Purple200,
     primaryVariant = Purple700,
     secondary = Teal200,
-    onBackground = Color.White
+    onBackground = Color.Black
 )
 
 private val LightColorPalette = lightColors(
@@ -51,13 +51,10 @@ fun JetDeepLTheme(
 
 open class ExtensionColors private constructor(
     var inputTextColor: Color,
-    var inputBackgroundColor: Color,
     var outputTextColor: Color,
-    var outputBackgroundColor: Color,
-    var toggleLangIconColor: Color,
+    var toggleLangTextColor: Color,
     var selectLangTextColor: Color,
     var selectLangTextSpecificColor: Color,
-    var selectLangIconColor: Color,
     var iconColor: Color,
     var translateColor: Color,
     var inputHintColor: Color,
@@ -65,13 +62,10 @@ open class ExtensionColors private constructor(
 ) {
     object LightExtensionColors : ExtensionColors(
         inputTextColor = Color.Black,
-        inputBackgroundColor = Color.White,
         outputTextColor = Color.Black,
-        outputBackgroundColor = Color.White,
-        toggleLangIconColor = Color.Black,
+        toggleLangTextColor = Color.Black,
         selectLangTextColor = Color.Black,
         selectLangTextSpecificColor = Color(0xff99c455),
-        selectLangIconColor = Color.Black,
         iconColor = Color(0xff5d5df3),
         translateColor = Color(0xff5d5df3),
         inputHintColor = Color(0xffcccccc),
@@ -79,14 +73,11 @@ open class ExtensionColors private constructor(
     )
 
     object DarkExtensionColors : ExtensionColors(
-        inputTextColor = Color.Black,
-        inputBackgroundColor = Color.White,
-        outputTextColor = Color.Black,
-        outputBackgroundColor = Color.White,
-        toggleLangIconColor = Color.Black,
+        inputTextColor = Color.White,
+        outputTextColor = Color.White,
+        toggleLangTextColor = Color.White,
         selectLangTextColor = Color.White,
         selectLangTextSpecificColor = Color(0xff99c455),
-        selectLangIconColor = Color.White,
         iconColor = Color(0xffffffff),
         translateColor = Color(0xff5d5df3),
         inputHintColor = Color(0xffcccccc),

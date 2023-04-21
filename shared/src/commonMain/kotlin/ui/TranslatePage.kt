@@ -5,6 +5,7 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -98,7 +99,7 @@ fun TranslateLayout(viewModel: MainViewModel, scaffoldState: ScaffoldState) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     InputBlock(viewModel, scaffoldState)
-                    Divider(color = MaterialTheme.extensionColors.translateColor, thickness = 2.dp)
+                    Divider(color = MaterialTheme.extensionColors.inputTextColor, thickness = 2.dp, modifier = Modifier.padding(vertical = 10.dp))
                     OutputBlock(viewModel, scaffoldState)
                 }
             }
@@ -122,8 +123,7 @@ fun ColumnScope.OutputBlock(viewModel: MainViewModel, scaffoldState: ScaffoldSta
                         hideSoftKeyboard(platformContext)
                     }
                 )
-            }
-            .padding(top = 20.dp),
+            },
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             Text(
@@ -133,13 +133,13 @@ fun ColumnScope.OutputBlock(viewModel: MainViewModel, scaffoldState: ScaffoldSta
                     .weight(0.8f)
                     .fillMaxHeight()
                     .clip(RoundedCornerShape(20.dp))
-                    .background(MaterialTheme.extensionColors.outputBackgroundColor)
+                    .background(Color.Transparent)
                     .padding(start = 20.dp, top = 20.dp),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.W500,
                 color = MaterialTheme.extensionColors.outputTextColor
             )
-            if (viewModel.displayOutput.isNotEmpty() && viewModel.isTranslatSuccess) {
+            if (viewModel.displayOutput.isNotEmpty()) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -256,9 +256,10 @@ fun ColumnScope.InputBlock(viewModel: MainViewModel, scaffoldState: ScaffoldStat
                     .fillMaxWidth()
                     .weight(0.8f)
                     .fillMaxHeight()
-                    .clip(RoundedCornerShape(20.dp)),
+                    .clip(RoundedCornerShape(20.dp))
+                    .border(1.dp, Color.White, RoundedCornerShape(20.dp)),
                 colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = MaterialTheme.extensionColors.inputBackgroundColor,
+                    backgroundColor = Color.Transparent,
                     focusedIndicatorColor = Color.White,
                     unfocusedIndicatorColor = Color.White,
                     textColor = MaterialTheme.extensionColors.inputTextColor
@@ -392,21 +393,21 @@ fun SelectLanguageBar(
                 .width(150.dp)
                 .fillMaxHeight()
                 .clip(RoundedCornerShape(20.dp))
-
+                .border(1.dp, Color.White, RoundedCornerShape(20.dp))
         ) {
             Text(
                 text = viewModel.displaySourceLanguage,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.W900,
                 modifier = Modifier.alpha(textAlpha.value),
-                color = Color.Black
+                color = MaterialTheme.extensionColors.toggleLangTextColor
             )
             Spacer(modifier = Modifier.width(2.dp))
             Icon(
                 painter = painterResource("ic_down_arrow.xml"),
                 contentDescription = "down_arrow",
                 Modifier.size(15.dp),
-                tint = MaterialTheme.extensionColors.toggleLangIconColor
+                tint = MaterialTheme.extensionColors.toggleLangTextColor
             )
         }
         Box(
@@ -451,20 +452,21 @@ fun SelectLanguageBar(
                 .width(150.dp)
                 .fillMaxHeight()
                 .clip(RoundedCornerShape(20.dp))
+                .border(1.dp, Color.White, RoundedCornerShape(20.dp))
         ) {
             Text(
                 text = viewModel.displayTargetLanguage,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.W900,
                 modifier = Modifier.alpha(textAlpha.value),
-                color = Color.Black
+                color = MaterialTheme.extensionColors.toggleLangTextColor
             )
             Spacer(modifier = Modifier.width(2.dp))
             Icon(
                 painter = painterResource("ic_down_arrow.xml"),
                 contentDescription = "down_arrow",
                 Modifier.size(15.dp),
-                tint = MaterialTheme.extensionColors.toggleLangIconColor
+                tint = MaterialTheme.extensionColors.toggleLangTextColor
             )
         }
     }
@@ -583,7 +585,7 @@ fun SearchLanguageField(viewModel: MainViewModel) {
             Text(text = "搜索")
         },
         colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = MaterialTheme.extensionColors.searchLanguageColor,
+            backgroundColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
         ),
