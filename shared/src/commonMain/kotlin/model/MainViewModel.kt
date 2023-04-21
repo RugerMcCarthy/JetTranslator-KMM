@@ -23,15 +23,15 @@ sealed class SelectMode {
     object TARGET : SelectMode()
 }
 
-class MainViewModel constructor(private var gptRepo: GptRepo, private var context: Any) {
+class MainViewModel constructor(private var gptRepo: GptRepo, context: Any) {
+    var localEnvStore = getLocalEnvStore(context)
     var displayOutput by mutableStateOf("")
     var displayInput by mutableStateOf("")
     var isTranslatSuccess by mutableStateOf(false)
-    var displaySourceLanguage by mutableStateOf("自动检测")
-    var displayTargetLanguage by mutableStateOf("中文")
+    var displaySourceLanguage by mutableStateOf(localEnvStore.string("source_lang") ?: "自动检测")
+    var displayTargetLanguage by mutableStateOf(localEnvStore.string("target_lang") ?:"中文")
     var flipToggle = false
     var flipEventFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
-    var localEnvStore = getLocalEnvStore(context)
     var accessCode by mutableStateOf(localEnvStore.string("access_code") ?: "")
     var currentSelectMode: SelectMode by mutableStateOf(SelectMode.SOURCE)
         private set
@@ -133,9 +133,11 @@ class MainViewModel constructor(private var gptRepo: GptRepo, private var contex
         when (currentSelectMode) {
             SelectMode.SOURCE -> {
                 displaySourceLanguage = languageName
+                localEnvStore.set("source_lang", languageName)
             }
             SelectMode.TARGET -> {
                 displayTargetLanguage = languageName
+                localEnvStore.set("target_lang", languageName)
             }
         }
     }
