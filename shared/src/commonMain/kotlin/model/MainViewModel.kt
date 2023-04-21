@@ -37,9 +37,6 @@ class MainViewModel constructor(private var gptRepo: GptRepo, private var contex
         private set
     var focusOnSearch by mutableStateOf(false)
 
-    var displayLanguageList by mutableStateOf<List<String>>(
-        AllAvailableLanguages.keys.toList()
-    )
 
     val viewModelScope = CoroutineScope(EmptyCoroutineContext)
     private val sourceLanguageCode

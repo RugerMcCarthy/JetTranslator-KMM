@@ -45,6 +45,7 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -587,9 +588,16 @@ fun SelectLanguageSheet(sheetState: ModalBottomSheetState, viewModel: MainViewMo
             .padding(top = 25.dp, start = 15.dp, end = 15.dp)
     ) {
         Column(Modifier.fillMaxWidth()) {
-            SearchLanguageField(viewModel)
+            val availableDisplayLanguageList = AllAvailableLanguages.filter {
+                if (viewModel.currentSelectMode == SelectMode.SOURCE) {
+                    return@filter it != viewModel.displayTargetLanguage
+                } else {
+                    return@filter it != viewModel.displaySourceLanguage && it != "自动检测"
+                }
+            }
+            SearchLanguageField(viewModel, availableDisplayLanguageList)
             Text(
-                text = "全部${viewModel.displayLanguageList.size}种语言",
+                text = "全部${availableDisplayLanguageList.size}种语言",
                 color = MaterialTheme.extensionColors.selectLangTextColor,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -598,10 +606,7 @@ fun SelectLanguageSheet(sheetState: ModalBottomSheetState, viewModel: MainViewMo
             LazyColumn(
                 Modifier.fillMaxWidth(),
             ) {
-                for (language in viewModel.displayLanguageList) {
-                    if (viewModel.currentSelectMode == SelectMode.TARGET && language == "自动检测") {
-                        continue
-                    }
+                for (language in availableDisplayLanguageList) {
                     item {
                         SelectLanguageItem(sheetState, viewModel, language)
                     }
@@ -654,16 +659,19 @@ fun SelectLanguageItem(sheetState: ModalBottomSheetState, viewModel: MainViewMod
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun SearchLanguageField(viewModel: MainViewModel) {
+fun SearchLanguageField(viewModel: MainViewModel, availableDisplayLanguageList: List<String>) {
     var displayLanguageInput by remember { mutableStateOf("") }
+    var displayLanguageList by remember {
+        mutableStateOf(availableDisplayLanguageList)
+    }
     TextField(
         value = displayLanguageInput,
         onValueChange = { value ->
             displayLanguageInput = value
-            viewModel.displayLanguageList = if (value.isEmpty()) {
-                AllAvailableLanguages.keys.toList()
+            displayLanguageList = if (value.isEmpty()) {
+                availableDisplayLanguageList
             } else {
-                AllAvailableLanguages.keys.filter {
+                availableDisplayLanguageList.filter {
                     it.contains(value)
                 }
             }
@@ -676,7 +684,7 @@ fun SearchLanguageField(viewModel: MainViewModel) {
                 IconButton(
                     onClick = {
                         displayLanguageInput = ""
-                        viewModel.displayLanguageList = AllAvailableLanguages.keys.toList()
+                        displayLanguageList = availableDisplayLanguageList
                     }
                 ) {
                     Icon(
