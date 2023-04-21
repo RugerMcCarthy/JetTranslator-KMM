@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import edu.bupt.jetdeepl.data.AllAvailableLanguages
 import edu.bupt.jetdeepl.model.GptRepo
+import getLocalEnvStore
 import io.ktor.client.call.body
 import io.ktor.client.statement.bodyAsText
 import io.ktor.utils.io.errors.IOException
@@ -22,8 +23,7 @@ sealed class SelectMode {
     object TARGET : SelectMode()
 }
 
-class MainViewModel constructor(private var gptRepo: GptRepo) {
-    var accessCode by mutableStateOf("")
+class MainViewModel constructor(private var gptRepo: GptRepo, private var context: Any) {
     var displayOutput by mutableStateOf("")
     var displayInput by mutableStateOf("")
     var isTranslatSuccess by mutableStateOf(false)
@@ -31,7 +31,8 @@ class MainViewModel constructor(private var gptRepo: GptRepo) {
     var displayTargetLanguage by mutableStateOf("中文")
     var flipToggle = false
     var flipEventFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
-
+    var localEnvStore = getLocalEnvStore(context)
+    var accessCode by mutableStateOf(localEnvStore.string("access_code") ?: "")
     var currentSelectMode: SelectMode by mutableStateOf(SelectMode.SOURCE)
         private set
     var focusOnSearch by mutableStateOf(false)
@@ -89,7 +90,7 @@ class MainViewModel constructor(private var gptRepo: GptRepo) {
                     }
                     delay(500)
                     count++
-                    if (count == 60) {
+                    if (count >= 60) {
                         translateFlow.emit("似乎网络出现了点问题～")
                     }
                 }
@@ -113,9 +114,6 @@ class MainViewModel constructor(private var gptRepo: GptRepo) {
 
     fun flipLanguage() {
         flipToggle = !flipToggle
-//        viewModelScope.launch {
-//            flipEventFlow.emit(Unit)
-//        }
         flipEventFlow.tryEmit(Unit)
     }
 
@@ -143,5 +141,9 @@ class MainViewModel constructor(private var gptRepo: GptRepo) {
                 displayTargetLanguage = languageName
             }
         }
+    }
+
+    fun recordCurrentAccessCode() {
+        localEnvStore.set("access_code", accessCode)
     }
 }

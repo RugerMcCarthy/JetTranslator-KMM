@@ -137,7 +137,7 @@ fun SettingsDrawer(viewModel: MainViewModel) {
                                 if (it.length <= 5) {
                                     return@let it
                                 }
-                                it.substring(0, 6)
+                                it.substring(0, 5)
                             }
                         },
                         modifier = Modifier

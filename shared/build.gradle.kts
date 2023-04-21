@@ -43,6 +43,7 @@ kotlin {
         extraSpecAttributes["resources"] = "['src/commonMain/resources/**', 'src/iosMain/resources/**']"
     }
     val ktorVersion = "2.2.4"
+    val kvaultVersion = "1.10.0"
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -55,6 +56,7 @@ kotlin {
                 implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
                 implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
                 implementation("io.ktor:ktor-client-cio:$ktorVersion")
+                implementation("com.liftric:kvault:$kvaultVersion")
             }
         }
         val androidMain by getting {

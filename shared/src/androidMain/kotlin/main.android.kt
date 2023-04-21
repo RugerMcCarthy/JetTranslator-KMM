@@ -1,5 +1,7 @@
 
+import android.content.Context
 import android.util.Log
+import com.liftric.kvault.KVault
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -30,4 +32,11 @@ actual val httpClient = HttpClient(OkHttp) {
             }
         )
     }
+}
+lateinit var localEnvStore: KVault
+actual fun getLocalEnvStore(context: Any): KVault {
+    if (!::localEnvStore.isInitialized) {
+        localEnvStore = KVault(context as Context, "translator")
+    }
+    return localEnvStore
 }

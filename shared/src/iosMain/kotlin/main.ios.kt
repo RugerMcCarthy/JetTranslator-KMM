@@ -1,5 +1,6 @@
 
 import androidx.compose.ui.window.ComposeUIViewController
+import com.liftric.kvault.KVault
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.darwin.Darwin
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -26,6 +27,15 @@ actual val httpClient = HttpClient(Darwin) {
     install(ContentNegotiation) {
         json()
     }
+}
+
+lateinit var localEnvStore: KVault
+
+actual fun getLocalEnvStore(context: Any): KVault {
+    if (!::localEnvStore.isInitialized) {
+        localEnvStore = KVault("translator")
+    }
+    return localEnvStore
 }
 
 fun MainViewController(): UIViewController = ComposeUIViewController { App() }
